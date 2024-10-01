@@ -20,7 +20,8 @@ app = dash.Dash(__name__)
 app.layout = html.Div([
     html.Div([
         html.H1("DUT Research Dashboard", style={'display': 'inline-block', 'verticalAlign': 'middle'}),
-        html.Img(src='/assets/my_image.png', style={'display': 'inline-block', 'height': '100px', 'float': 'right'})
+        # Increase the logo size to 300%
+        html.Img(src='/assets/my_image.png', style={'display': 'inline-block', 'transform': 'scale(3)', 'float': 'right'})
     ], style={'width': '100%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
 
     dcc.Dropdown(
@@ -39,7 +40,8 @@ app.layout = html.Div([
     ),
 
     dcc.Graph(id='graph-output', style={'display': 'block'}),
-    html.Img(id='image-output', style={'display': 'none', 'width': '80%', 'height': 'auto'}),
+    # Decrease the width of other images
+    html.Img(id='image-output', style={'display': 'none', 'width': '50%', 'height': 'auto'}),  # Reduced width to 50%
     html.Div(id='image-title', style={'text-align': 'center', 'font-size': '20px', 'margin-top': '10px'})
 ])
 
@@ -145,19 +147,19 @@ def update_output(selected_graph):
 
     elif selected_graph == 'image1':
         # Display first image (Postgraduate Enrolment 2024)
-        return {}, {'display': 'none'}, '/assets/1.png', {'display': 'block'}, 'Postgraduate Enrolment 2024'
+        return {}, {'display': 'none'}, '/assets/1.png', {'display': 'block', 'width': '50%'}, 'Postgraduate Enrolment 2024'
 
     elif selected_graph == 'image2':
         # Display second image (Current Postdoctoral Fellows)
-        return {}, {'display': 'none'}, '/assets/2.png', {'display': 'block'}, 'Current Postdoctoral Fellows'
+        return {}, {'display': 'none'}, '/assets/2.png', {'display': 'block', 'width': '50%'}, 'Current Postdoctoral Fellows'
 
     elif selected_graph == 'image3':
         # Display third image (Emeritus/Honorary/Adjunct Professors)
-        return {}, {'display': 'none'}, '/assets/3.png', {'display': 'block'}, 'Emeritus/Honorary/Adjunct Professors'
+        return {}, {'display': 'none'}, '/assets/3.png', {'display': 'block', 'width': '50%'}, 'Emeritus/Honorary/Adjunct Professors'
 
     elif selected_graph == 'image4':
         # Display fourth image (Departmental Research Outputs 2023)
-        return {}, {'display': 'none'}, '/assets/4.png', {'display': 'block'}, 'Departmental Research Outputs 2023'
+        return {}, {'display': 'none'}, '/assets/4.png', {'display': 'block', 'width': '50%'}, 'Departmental Research Outputs 2023'
 
 # Run the Dash app
 server = app.server  # Expose the Flask server for Gunicorn
