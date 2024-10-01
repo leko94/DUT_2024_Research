@@ -22,7 +22,7 @@ app.layout = html.Div([
         html.H1("DUT Research Dashboard", style={'display': 'inline-block', 'verticalAlign': 'middle'}),
         # Increase the logo size to 300%
         html.Img(src='/assets/my_image.png', style={'display': 'inline-block', 'transform': 'scale(3)', 'float': 'right'})
-    ], style={'width': '100%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
+    ], style={'width': '50%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
 
     dcc.Dropdown(
         id='graph-selector',
@@ -147,19 +147,19 @@ def update_output(selected_graph):
 
     elif selected_graph == 'image1':
         # Display first image (Postgraduate Enrolment 2024)
-        return {}, {'display': 'none'}, '/assets/1.png', {'display': 'block', 'width': '50%'}, 'Postgraduate Enrolment 2024'
+        return {}, {'display': 'none'}, '/assets/1.png', {'display': 'block', 'width': '70%'}, 'Postgraduate Enrolment 2024'
 
     elif selected_graph == 'image2':
         # Display second image (Current Postdoctoral Fellows)
-        return {}, {'display': 'none'}, '/assets/2.png', {'display': 'block', 'width': '50%'}, 'Current Postdoctoral Fellows'
+        return {}, {'display': 'none'}, '/assets/2.png', {'display': 'block', 'width': '70%'}, 'Current Postdoctoral Fellows'
 
     elif selected_graph == 'image3':
         # Display third image (Emeritus/Honorary/Adjunct Professors)
-        return {}, {'display': 'none'}, '/assets/3.png', {'display': 'block', 'width': '50%'}, 'Emeritus/Honorary/Adjunct Professors'
+        return {}, {'display': 'none'}, '/assets/3.png', {'display': 'block', 'width': '70%'}, 'Emeritus/Honorary/Adjunct Professors'
 
     elif selected_graph == 'image4':
         # Display fourth image (Departmental Research Outputs 2023)
-        return {}, {'display': 'none'}, '/assets/4.png', {'display': 'block', 'width': '50%'}, 'Departmental Research Outputs 2023'
+        return {}, {'display': 'none'}, '/assets/4.png', {'display': 'block', 'width': '70%'}, 'Departmental Research Outputs 2023'
 
 # Run the Dash app
 server = app.server  # Expose the Flask server for Gunicorn
