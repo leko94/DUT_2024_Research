@@ -18,7 +18,10 @@ app = dash.Dash(__name__)
 
 # Layout of the app
 app.layout = html.Div([
-    html.H1("DUT Research Dashboard"),
+    html.Div([
+        html.H1("DUT Research Dashboard", style={'display': 'inline-block', 'verticalAlign': 'middle'}),
+        html.Img(src='/content/my_image.png', style={'display': 'inline-block', 'height': '100px', 'float': 'right'})
+    ], style={'width': '100%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
 
     dcc.Dropdown(
         id='graph-selector',
