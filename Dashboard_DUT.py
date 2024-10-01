@@ -20,9 +20,8 @@ app = dash.Dash(__name__)
 app.layout = html.Div([
     html.Div([
         html.H1("DUT Research Dashboard", style={'display': 'inline-block', 'verticalAlign': 'middle'}),
-        # Increase the logo size to 300%
-        html.Img(src='/assets/my_image.png', style={'display': 'inline-block', 'transform': 'scale(3)', 'float': 'right'})
-    ], style={'width': '50%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
+        html.Img(src='/assets/my_image.png', style={'display': 'inline-block', 'height': '100px', 'float': 'right'})
+    ], style={'width': '100%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
 
     dcc.Dropdown(
         id='graph-selector',
