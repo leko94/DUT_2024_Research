@@ -160,5 +160,7 @@ def update_output(selected_graph):
         return {}, {'display': 'none'}, '/content/4.png', {'display': 'block'}, 'Departmental Research Outputs 2023'
 
 # Run the Dash app
+server = app.server  # Expose the Flask server for Gunicorn
+
 if __name__ == '__main__':
     app.run_server(debug=True)
