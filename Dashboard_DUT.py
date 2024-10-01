@@ -20,7 +20,7 @@ app = dash.Dash(__name__)
 app.layout = html.Div([
     html.Div([
         html.H1("DUT Research Dashboard", style={'display': 'inline-block', 'verticalAlign': 'middle'}),
-        html.Img(src='/content/my_image.png', style={'display': 'inline-block', 'height': '100px', 'float': 'right'})
+        html.Img(src='/assets/my_image.png', style={'display': 'inline-block', 'height': '100px', 'float': 'right'})
     ], style={'width': '100%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
 
     dcc.Dropdown(
@@ -145,19 +145,19 @@ def update_output(selected_graph):
 
     elif selected_graph == 'image1':
         # Display first image (Postgraduate Enrolment 2024)
-        return {}, {'display': 'none'}, '/content/1.png', {'display': 'block'}, 'Postgraduate Enrolment 2024'
+        return {}, {'display': 'none'}, '/assets/1.png', {'display': 'block'}, 'Postgraduate Enrolment 2024'
 
     elif selected_graph == 'image2':
         # Display second image (Current Postdoctoral Fellows)
-        return {}, {'display': 'none'}, '/content/2.png', {'display': 'block'}, 'Current Postdoctoral Fellows'
+        return {}, {'display': 'none'}, '/assets/2.png', {'display': 'block'}, 'Current Postdoctoral Fellows'
 
     elif selected_graph == 'image3':
         # Display third image (Emeritus/Honorary/Adjunct Professors)
-        return {}, {'display': 'none'}, '/content/3.png', {'display': 'block'}, 'Emeritus/Honorary/Adjunct Professors'
+        return {}, {'display': 'none'}, '/assets/3.png', {'display': 'block'}, 'Emeritus/Honorary/Adjunct Professors'
 
     elif selected_graph == 'image4':
         # Display fourth image (Departmental Research Outputs 2023)
-        return {}, {'display': 'none'}, '/content/4.png', {'display': 'block'}, 'Departmental Research Outputs 2023'
+        return {}, {'display': 'none'}, '/assets/4.png', {'display': 'block'}, 'Departmental Research Outputs 2023'
 
 # Run the Dash app
 server = app.server  # Expose the Flask server for Gunicorn
