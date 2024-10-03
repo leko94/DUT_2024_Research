@@ -12,6 +12,7 @@ df_sheet1 = pd.read_excel(file_path, sheet_name='Sheet1')
 df_sheet2 = pd.read_excel(file_path, sheet_name='Sheet2')
 df_sheet3 = pd.read_excel(file_path, sheet_name='Sheet3')
 df_sheet4 = pd.read_excel(file_path, sheet_name='Sheet4')
+df_sheet9 = pd.read_excel(file_path, sheet_name='Sheet9')  # FAS-specific data from Sheet9
 
 # Prepare the Dash app
 app = dash.Dash(__name__)
@@ -19,28 +20,28 @@ app = dash.Dash(__name__)
 # Layout of the app
 app.layout = html.Div([
     html.Div([
-        html.H1("DUT Research Dashboard", style={'display': 'inline-block', 'verticalAlign': 'middle'}),
+        html.H1("DUT-FAS Research Dashboard", style={'display': 'inline-block', 'verticalAlign': 'middle'}),
         html.Img(src='/assets/my_image.png', style={'display': 'inline-block', 'height': '100px', 'float': 'right'})
     ], style={'width': '100%', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'space-between'}),
 
     dcc.Dropdown(
         id='graph-selector',
         options=[
-            {'label': 'Postgraduate Enrolment (2020-2023)', 'value': 'graph1'},
-            {'label': 'FAS Postgraduate Enrolment (2020-2023)', 'value': 'graph2'},
-            {'label': '2023 Student Enrolment by Level', 'value': 'graph3'},
-            {'label': 'Postgraduate Graduation Rate (2015-2023)', 'value': 'graph4'},
-            {'label': 'Postgraduate Enrolment 2024 (Image)', 'value': 'image1'},
-            {'label': 'Current Postdoctoral Fellows (Image)', 'value': 'image2'},
-            {'label': 'Emeritus/Honorary/Adjunct Professors (Image)', 'value': 'image3'},
-            {'label': 'Departmental Research Outputs 2023 (Image)', 'value': 'image4'}
+            {'label': '1. Postgraduate Enrolment (2020-2023)', 'value': 'graph1'},
+            {'label': '2. FAS Postgraduate Percentage of Total Enrolment (2020-2023)', 'value': 'graph2'},
+            {'label': '3. Student Enrolment by Level (2023)', 'value': 'graph3'},
+            {'label': '4. Postgraduate Graduation Rate (2015-2023)', 'value': 'graph4'},
+            {'label': '5. FAS Student Enrolment by Level (2023)', 'value': 'graph5'},  # New graph for FAS
+            {'label': '6. Postgraduate Enrolment 2024 (Image)', 'value': 'image1'},
+            {'label': '7. Current Postdoctoral Fellows (Image)', 'value': 'image2'},
+            {'label': '8. Emeritus/Honorary/Adjunct Professors (Image)', 'value': 'image3'},
+            {'label': '9. Departmental Research Outputs 2023 (Image)', 'value': 'image4'}
         ],
         value='graph1'
     ),
 
     dcc.Graph(id='graph-output', style={'display': 'block'}),
-    # Decrease the width of other images
-    html.Img(id='image-output', style={'display': 'none', 'width': '50%', 'height': 'auto'}),  # Reduced width to 50%
+    html.Img(id='image-output', style={'display': 'none', 'width': '50%', 'height': 'auto'}),
     html.Div(id='image-title', style={'text-align': 'center', 'font-size': '20px', 'margin-top': '10px'})
 ])
 
@@ -100,7 +101,7 @@ def update_output(selected_graph):
         return fig, {'display': 'block'}, None, {'display': 'none'}, ''
 
     elif selected_graph == 'graph3':
-        # Filter data for Sheet3
+        # Filter data for Sheet3 (Remove FAS-related data)
         df_filtered = df_sheet3[['2023 Student Enrolment by Level', 'UG (NQF 5-7)', 'PG upto Masters (NQF8)', 'PG (NQF9-10)']].copy()
         df_filtered.set_index('2023 Student Enrolment by Level', inplace=True)
 
@@ -112,13 +113,21 @@ def update_output(selected_graph):
                 y=df_filtered[col],
                 name=col,
                 text=df_filtered[col],  # Display actual values
-                textposition='auto'
+                textposition='auto',
+                marker=dict(
+                    line=dict(width=1.5)  # Adjusting the bar size
+                )
             ))
+
+        # Update layout for better visibility and rotated x-axis labels
         fig.update_layout(
-            title='2023 Student Enrolment by Level',
+            title='2023 Student Enrolment by Level (Non-FAS)',
             xaxis_title='Programs',
             yaxis_title='Number of Students',
-            barmode='group'
+            xaxis=dict(tickangle=-90),  # Rotate labels to 270 degrees (equivalent to -90)
+            barmode='group',
+            bargap=0.2,  # Adjust gap between bars for better visibility
+            bargroupgap=0.1  # Adjust gap between groups of bars
         )
         return fig, {'display': 'block'}, None, {'display': 'none'}, ''
 
@@ -132,7 +141,7 @@ def update_output(selected_graph):
             x=df_sheet4['Postgraduate Graduation Rate'],
             y=df_sheet4['Faculty'],
             mode='lines+markers',
-            text=[f'{val}%' for val in df_sheet4['Faculty']],  # Display percentage values
+            text=[f'{val}' for val in df_sheet4['Faculty']],  # Display percentage values
             textposition='bottom center',
             line=dict(color='blue')
         ))
@@ -141,6 +150,37 @@ def update_output(selected_graph):
             xaxis_title='Year',
             yaxis_title='Graduation Rate (%)',
             xaxis=dict(tickmode='linear')  # Ensure all years are displayed
+        )
+        return fig, {'display': 'block'}, None, {'display': 'none'}, ''
+
+    elif selected_graph == 'graph5':
+        # Filter FAS-specific data from Sheet9
+        df_filtered = df_sheet9[['2023 Student Enrolment by Level', 'UG (NQF 5-7)', 'PG upto Masters (NQF8)', 'PG (NQF9-10)']].copy()
+        df_filtered.set_index('2023 Student Enrolment by Level', inplace=True)
+
+        # Create the bar chart for graph5 (FAS data)
+        fig = go.Figure()
+        for col in df_filtered.columns:
+            fig.add_trace(go.Bar(
+                x=df_filtered.index,
+                y=df_filtered[col],
+                name=col,
+                text=df_filtered[col],  # Display actual values
+                textposition='auto',
+                marker=dict(
+                    line=dict(width=1.5)  # Adjusting the bar size
+                )
+            ))
+
+        # Update layout for better visibility and rotated x-axis labels
+        fig.update_layout(
+            title='2023 FAS Student Enrolment by Level',
+            xaxis_title='Programs',
+            yaxis_title='Number of Students',
+            xaxis=dict(tickangle=-90),  # Rotate labels to 270 degrees (equivalent to -90)
+            barmode='group',
+            bargap=0.2,  # Adjust gap between bars for better visibility
+            bargroupgap=0.1  # Adjust gap between groups of bars
         )
         return fig, {'display': 'block'}, None, {'display': 'none'}, ''
 
