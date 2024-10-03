@@ -30,8 +30,8 @@ app.layout = html.Div([
             {'label': '1. Postgraduate Enrolment (2020-2023)', 'value': 'graph1'},
             {'label': '2. FAS Postgraduate Percentage of Total Enrolment (2020-2023)', 'value': 'graph2'},
             {'label': '3. Student Enrolment by Level (2023)', 'value': 'graph3'},
-            {'label': '4. Postgraduate Graduation Rate (2015-2023)', 'value': 'graph4'},
-            {'label': '5. FAS Student Enrolment by Level (2023)', 'value': 'graph5'},  # New graph for FAS
+            {'label': '4. FAS Student Enrolment by Level (2023)', 'value': 'graph4'},  # Moved FAS to 4th position
+            {'label': '5. Postgraduate Graduation Rate (2015-2023)', 'value': 'graph5'},  # Postgraduate Graduation Rate is now the 5th graph
             {'label': '6. Postgraduate Enrolment 2024 (Image)', 'value': 'image1'},
             {'label': '7. Current Postdoctoral Fellows (Image)', 'value': 'image2'},
             {'label': '8. Emeritus/Honorary/Adjunct Professors (Image)', 'value': 'image3'},
@@ -132,33 +132,11 @@ def update_output(selected_graph):
         return fig, {'display': 'block'}, None, {'display': 'none'}, ''
 
     elif selected_graph == 'graph4':
-        # Strip any leading/trailing spaces from column names and ensure integer type for graduation rate
-        df_sheet4.columns = df_sheet4.columns.str.strip()
-        df_sheet4['Postgraduate Graduation Rate'] = df_sheet4['Postgraduate Graduation Rate'].astype(int)
-
-        # Create the line graph for graph4
-        fig = go.Figure(data=go.Scatter(
-            x=df_sheet4['Postgraduate Graduation Rate'],
-            y=df_sheet4['Faculty'],
-            mode='lines+markers',
-            text=[f'{val}' for val in df_sheet4['Faculty']],  # Display percentage values
-            textposition='bottom center',
-            line=dict(color='blue')
-        ))
-        fig.update_layout(
-            title='Postgraduate Graduation Rate (2015-2023)',
-            xaxis_title='Year',
-            yaxis_title='Graduation Rate (%)',
-            xaxis=dict(tickmode='linear')  # Ensure all years are displayed
-        )
-        return fig, {'display': 'block'}, None, {'display': 'none'}, ''
-
-    elif selected_graph == 'graph5':
-        # Filter FAS-specific data from Sheet9
+        # Filter FAS-specific data from Sheet9 (Moved to 4th position)
         df_filtered = df_sheet9[['2023 Student Enrolment by Level', 'UG (NQF 5-7)', 'PG upto Masters (NQF8)', 'PG (NQF9-10)']].copy()
         df_filtered.set_index('2023 Student Enrolment by Level', inplace=True)
 
-        # Create the bar chart for graph5 (FAS data)
+        # Create the bar chart for graph4 (FAS data)
         fig = go.Figure()
         for col in df_filtered.columns:
             fig.add_trace(go.Bar(
@@ -181,6 +159,28 @@ def update_output(selected_graph):
             barmode='group',
             bargap=0.2,  # Adjust gap between bars for better visibility
             bargroupgap=0.1  # Adjust gap between groups of bars
+        )
+        return fig, {'display': 'block'}, None, {'display': 'none'}, ''
+
+    elif selected_graph == 'graph5':
+        # Strip any leading/trailing spaces from column names and ensure integer type for graduation rate
+        df_sheet4.columns = df_sheet4.columns.str.strip()
+        df_sheet4['Postgraduate Graduation Rate'] = df_sheet4['Postgraduate Graduation Rate'].astype(int)
+
+        # Create the line graph for graph5 (Postgraduate Graduation Rate)
+        fig = go.Figure(data=go.Scatter(
+            x=df_sheet4['Postgraduate Graduation Rate'],
+            y=df_sheet4['Faculty'],
+            mode='lines+markers',
+            text=[f'{val}' for val in df_sheet4['Faculty']],  # Display percentage values
+            textposition='bottom center',
+            line=dict(color='blue')
+        ))
+        fig.update_layout(
+            title='Postgraduate Graduation Rate (2015-2023)',
+            xaxis_title='Year',
+            yaxis_title='Graduation Rate (%)',
+            xaxis=dict(tickmode='linear')  # Ensure all years are displayed
         )
         return fig, {'display': 'block'}, None, {'display': 'none'}, ''
 
